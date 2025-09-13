@@ -1,5 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import AuthContext from "../context/AuthContext";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Bloomer",
@@ -13,7 +15,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <AuthContext>
+          {children}
+          <Toaster />
+        </AuthContext>
+      </body>
     </html>
   );
 }
