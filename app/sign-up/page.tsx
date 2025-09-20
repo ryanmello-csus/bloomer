@@ -68,8 +68,8 @@ export default function SignUp() {
         if (result?.error) {
           setError("Account created but failed to sign in. Please try signing in manually.");
         } else {
-          router.push("/");
-          router.refresh();
+          // Redirect to home page after successful registration and sign in
+          router.replace("/");
         }
       } else {
         setError(data.message || "Failed to create account");

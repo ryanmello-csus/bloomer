@@ -1,15 +1,30 @@
-import { auth } from "@/auth"
-import { NextResponse } from "next/server"
+import { auth } from "@/auth";
+import { NextResponse } from "next/server";
 
 export default auth((req) => {
-  // This middleware function runs in Edge Runtime
-  // It should not import or use Prisma directly
-  
-  // You can add custom logic here if needed
-  // For example, redirect users based on authentication status
-  
-  return NextResponse.next()
-})
+  const { nextUrl } = req;
+  const isLoggedIn = !!req.auth;
+
+  // Define auth pages
+  const isAuthPage =
+    nextUrl.pathname.startsWith("/sign-in") ||
+    nextUrl.pathname.startsWith("/sign-up");
+
+  // Define protected pages (home page and others)
+  const isProtectedPage = nextUrl.pathname === "/";
+
+  // Redirect authenticated users away from auth pages
+  if (isLoggedIn && isAuthPage) {
+    return NextResponse.redirect(new URL("/", nextUrl));
+  }
+
+  // Redirect non-authenticated users away from protected pages
+  if (!isLoggedIn && isProtectedPage) {
+    return NextResponse.redirect(new URL("/sign-in", nextUrl));
+  }
+
+  return NextResponse.next();
+});
 
 export const config = {
   matcher: [
@@ -23,4 +38,4 @@ export const config = {
      */
     "/((?!api|_next/static|_next/image|favicon.ico|public).*)",
   ],
-}
+};

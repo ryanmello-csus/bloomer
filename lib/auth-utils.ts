@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/prisma";
 import { User } from "@prisma/client";
 import { verifyPassword } from "@/utils/password";
 
@@ -7,7 +7,7 @@ import { verifyPassword } from "@/utils/password";
  */
 export async function getUserFromDb(email: string, password: string): Promise<User | null> {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await db.user.findUnique({
       where: { email: email }
     });
 
@@ -32,7 +32,7 @@ export async function getUserFromDb(email: string, password: string): Promise<Us
  */
 export async function createUser(email: string, password: string, name?: string): Promise<User | null> {
   try {
-    const user = await prisma.user.create({
+    const user = await db.user.create({
       data: {
         email,
         password,
@@ -52,7 +52,7 @@ export async function createUser(email: string, password: string, name?: string)
  */
 export async function userExists(email: string): Promise<boolean> {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await db.user.findUnique({
       where: { email }
     });
     return !!user;

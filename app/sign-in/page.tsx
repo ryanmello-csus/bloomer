@@ -32,9 +32,8 @@ export default function SignIn() {
       if (result?.error) {
         setError("Invalid credentials. Please try again.");
       } else {
-        // Redirect to dashboard or home page after successful sign in
-        router.push("/");
-        router.refresh();
+        setError("");
+        router.replace("/");
       }
     } catch (error) {
       setError("An error occurred. Please try again.");
